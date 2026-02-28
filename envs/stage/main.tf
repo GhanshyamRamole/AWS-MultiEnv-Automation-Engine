@@ -4,12 +4,12 @@ module "stage_infrastructure" {
   env        = var.env
   AWS_REGION = var.AWS_REGION
   AWS_AMI    = var.AWS_AMI
-  az         = var.az
+  azs        = [var.az, "us-west-1c"]
   key        = var.key
   passwd     = var.passwd
 
-  ansible_script_path = "modules/scripts/ansible_stage.sh"
-  workloads_script_path = "modules/scripts/ansible_stage.sh"
+  ansible_script_path = "scripts/ansible_stage.sh"
+  workloads_script_path = "scripts/docker.sh"
 
   ansible_count      = var.ansible_count
   docker_count       = var.docker_count
