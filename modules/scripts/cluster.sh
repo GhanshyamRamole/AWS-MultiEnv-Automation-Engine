@@ -1,9 +1,9 @@
 #!/bin/bash
-hostnamectl set-hostname eks
+hostnamectl set-hostname "${admin_pw}"-eks
 timedatectl set-timezone Asia/Kolkata
 useradd itadmin
-echo 111 | passwd --stdin itadmin
-echo 111 | passwd --stdin root
+echo "${admin_pw}" | passwd --stdin itadmin
+echo "${admin_pw}" | passwd --stdin root
 echo "itadmin  ALL=(ALL)   NOPASSWD: ALL" >> /etc/sudoers
 sed 's/PasswordAuthentication no/PasswordAuthentication yes/' -i /etc/ssh/sshd_config
 echo PermitRootLogin yes >> /etc/ssh/sshd_config

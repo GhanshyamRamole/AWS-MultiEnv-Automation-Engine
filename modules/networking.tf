@@ -7,11 +7,12 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "public" {
+  count                   = 2
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.subnet_cidr
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index)
   map_public_ip_on_launch = true
-  availability_zone       = var.az
-  tags                    = { Name = "${var.env}-public-subnet" }
+  availability_zone       = var.azs[count.index]
+  tags                    = { Name = "${var.env}-public-subnet-${count.index}" }
 }
 
 resource "aws_internet_gateway" "igw" {
@@ -28,7 +29,8 @@ resource "aws_route_table" "public_rt" {
 }
 
 resource "aws_route_table_association" "public_assoc" {
-  subnet_id      = aws_subnet.public.id
+  count          = 2
+  subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public_rt.id
 }
 
@@ -54,3 +56,5 @@ resource "aws_security_group" "web_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+
